@@ -26,13 +26,16 @@
       background: #16161D;
       color: #AFAFAD;
     }
+    a{
+        color: #FAF9F6;
+    }
     img, video{
         width: 100%;
         height: auto;
         overflow: scroll;
     }
     h1{
-      background: #00448C;
+      background: #7747CF;
       color: #FAF9F6;
       text-align: center;
       padding: 14px;
@@ -54,23 +57,19 @@
       left: 50%;
       width: 80%;
       transform: translate(-50%, -50%);
-      animation-name: fade;
-      animation-direction: ease-in;
-      transition: all .3s ease-in;
-      animation-duration: .3s;
     }
     .form textarea{
       outline: none;
       padding: 10px;
       border-radius: 5px;
-      border: 2px solid #00448C;
+      border: 2px solid #7747CF;
     }
     .form button{
       width: 100%;
       padding: 10px;
       border: none;
       border-radius: 5px;
-      background: #00448C;
+      background: #7747CF;
       border: 2px solid #FAF9F6;
       color: #FAF9F6;
     }
@@ -94,7 +93,7 @@
     }
     .postItem {
       margin-bottom: 10px;
-      background: #00448C;
+      background: #7747CF;
       transition: all .3s ease-in;
       color: #FAF9F6;
       box-shadow: 1px 1px 2px 1px #12121B;
@@ -102,7 +101,7 @@
       padding: 24px;
     }
     .show-form-btn{
-      background: #00448C;
+      background: #7747CF;
       z-index: 3;
       border: 2px solid #FAF9F6;
       font-size: 18px;
@@ -120,7 +119,7 @@
       top: 5%;
       right: 5%;
       padding: 10px 14px 10px 14px;
-      background: #00448C;
+      background: #7747CF;
       border: 2px solid #FAF9F6;
       font-size: 18px;
       color: #FAF9F6;
@@ -143,21 +142,13 @@
       bottom:0;
       top:0;
     }
-    @keyframes fade{
-        0%{
-            margin-top: -300px;
-            opacity: 0;
-        }
-        100%{
-            margin-top: 0px;
-            opacity: 1;
-        }
-    }
   </style>
 </head>
 <body>
   <h1>RANT?</h1>
+  
   <button class="show-form-btn" onclick="showForm()">📝</button>
+  
   <ul id="postList"></ul>
   
   <div class="form-container">
