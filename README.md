@@ -1,1 +1,1 @@
-# adios
+# my-rant.github.io
