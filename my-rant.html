@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title>Rant?</title>
+    <style>
+@font-face {
+        font-family: Bookman;
+        src: url('Bookman.otf');
+        font-display: swap;
+    }
+        * {
+            box-sizing: border-box;
+            font-family: Bookman;
+            padding: 0px;
+            margin: 0px;
+        }
+        a {
+            color: #FAF9F6;
+        }
+        iframe, img, video {
+            border-radius: 5px;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: #16161D;
+            color: #AFAFAD;
+        }
+        img, video {
+            width: 100%;
+            height: auto;
+            overflow: scroll;
+        }
+        h1 {
+            background: linear-gradient(180deg, #333335, #444445);
+            color: #FAF9F6;
+            letter-spacing: 2px;
+            text-align: center;
+            padding: 14px;
+        }
+        a {
+            text-decoration: none;
+        }
+        a h3 {
+            background: linear-gradient(180deg, #333335, #444445);
+            border-left: 2px solid #FAF9F6;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 24px;
+            color: #AFAFAD;
+        }
+        .form-container {
+            animation-name: fade;
+            animation-direction: ease-in;
+            transition: all .3s ease-in;
+            animation-duration: .3s;
+            background: linear-gradient(to left, rgba(0,0,0,0.65), rgba(0,0,0,0.65));
+            overflow: hidden;
+            position: fixed;
+            height: 100%;
+            width: 0%;
+            top: 0;
+            left: 0;
+        }
+        .form {
+            position: absolute;
+            display: grid;
+            gap: 4px;
+            top: 50%;
+            left: 50%;
+            width: 80%;
+            transform: translate(-50%, -50%);
+            animation-name: fade;
+            animation-direction: ease-in;
+            transition: all .3s ease-in;
+            animation-duration: .3s;
+        }
+        .form textarea {
+            outline: none;
+            padding: 10px;
+            border-radius: 5px;
+            border: 2px solid #FAF9F6;
+        }
+        .form button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: linear-gradient(180deg, #333335, #444445);
+            border: 2px solid #FAF9F6;
+            color: #FAF9F6;
+        }
+        #postInput {
+            width: 100%;
+        }
+        #postList {
+            display: grid;
+            gap: 4px;
+            padding: 0em 1em 0em 1em;
+            list-style-type: none;
+        }
+        #postList span {
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-size: 14px;
+            text-align: justify;
+            line-height: 1.5;
+        }
+        .postItem {
+            margin-bottom: 10px;
+            background: linear-gradient(180deg, #333335, #444445);
+            transition: all .3s ease-in;
+            color: #FAF9F6;
+            box-shadow: 1px 1px 2px 1px #12121B, 1px 1px 2px 1px #rant-123;
+            border-radius: 5px;
+            padding: 20px;
+        }
+        .show-form-btn {
+            background: linear-gradient(180deg, #333335, #444445);
+            z-index: 3;
+            border: 2px solid #FAF9F6;
+            font-size: 18px;
+            color: #FAF9F6;
+            border-radius: 5px;
+            outline: none;
+            color: #FAF9F6;
+            position: fixed;
+            padding: 10px;
+            bottom: 5%;
+            right: 5%;
+        }
+        .close-form-btn {
+            position: absolute;
+            top: 5%;
+            right: 5%;
+            padding: 10px 14px 10px 14px;
+            background: linear-gradient(180deg, #333335, #444445);
+            border: 2px solid #FAF9F6;
+            font-size: 18px;
+            color: #FAF9F6;
+            border-radius: 5px;
+            outline: none;
+        }
+        .video {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            padding-top: 56.25%;
+        }
+        .video iframe {
+            position: absolute;
+            border: none;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
+        }
+        .delete, .edit {
+            display: grid;
+            margin-top: 6px;
+            border: none;
+            border-radius: 12px;
+            outline: none;
+            padding: 6px;
+            width: 100%;
+        }
+@keyframes fade {
+            0% {
+                margin-top: -300px;
+                opacity: 0;
+            }
+            100% {
+                margin-top: 0px;
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>RANT?</h1>
+    <a href="https://ngl.link/seekingeleftheria"><h3>Message Anonymously</h3></a>
+    <button class="show-form-btn" onclick="showForm()">📝</button>
+    <ul id="postList"></ul>
+
+    <div class="form-container">
+        <button class="close-form-btn" onclick="closeForm()">×</button>
+        <div class="form">
+            <textarea id="postInput" rows="7" required="required"></textarea>
+            <button onclick="addPost()">Post</button>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            // Your Firebase config object here
+            apiKey: "AIzaSyCkJVGbmu1s4ChCjt5Cr2_l6ewARvpR77Y",
+            authDomain: "rant-123.firebaseapp.com",
+            projectId: "rant-123",
+            storageBucket: "rant-123.appspot.com",
+            messagingSenderId: "543799594406",
+            appId: "1:543799594406:web:569979efef782a46f3d367",
+            measurementId: "G-RW7GHB612T"
+
+        };
+        firebase.initializeApp(firebaseConfig);
+        const firestore = firebase.firestore();
+
+        // Function to add a new post to Firestore
+        function addPost() {
+            const postInput = document.getElementById('postInput');
+            const postText = postInput.value.trim();
+            const dateNow = Date();
+
+            if (postText !== '') {
+                firestore.collection('posts').add({
+                    text: postText,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    datenow: dateNow,
+                })
+                .then(() => {
+                    postInput.value = '';
+                    window.scrollTo(0, 0);
+                    hideForm();
+                })
+                .catch((error) => {
+                    console.error('Error adding document: ', error);
+                });
+            }
+
+        }
+
+        // show form function
+        function showForm() {
+            let showFormBtn = document.querySelector('.show-form-btn');
+            showFormBtn.addEventListener('click', () => {
+                let formContainer = document.querySelector('.form-container');
+                formContainer.style.width = '100%';
+
+            });
+        }
+
+        // hide form function
+        function hideForm() {
+            let formContainer = document.querySelector('.form-container');
+            formContainer.style.width = '0%';
+        }
+
+        // close form
+        function closeForm() {
+            let closeFormBtn = document.querySelector('.close-form-btn');
+            closeFormBtn.addEventListener('click', () => {
+                let formContainer = document.querySelector('.form-container');
+                formContainer.style.width = '0%';
+            });
+        }
+
+        // Function to render the posts on the webpage
+        function renderPosts(posts) {
+            const postList = document.getElementById('postList');
+            postList.innerHTML = '';
+
+            posts.forEach((post) => {
+                const postItem = document.createElement('li');
+                postItem.className = 'postItem';
+
+                const deleteButton = document.createElement('button');
+                deleteButton.className = "delete"
+                deleteButton.textContent = 'Delete';
+                deleteButton.addEventListener('click', () => {
+                    deletePost(post.id);
+                });
+
+                const editButton = document.createElement('button');
+                editButton.className = "edit"
+                editButton.textContent = 'Edit';
+                editButton.addEventListener('click', () => {
+                    const formContainer = document.querySelector('.form-container');
+                    const postInput = document.getElementById('postInput');
+                    const postButton = document.querySelector('.form button');
+
+                    formContainer.style.width = '100%';
+                    postInput.value = post.data().text;
+
+                    const editPostButton = document.createElement('button');
+                    editPostButton.textContent = 'Edit Post';
+                    editPostButton.id = 'editPostButton';
+
+                    editPostButton.onclick = () => {
+                        const updatedText = postInput.value.trim();
+                        if (updatedText !== '') {
+                            firestore.collection('posts').doc(post.id).update({
+                                text: updatedText,
+                            })
+                            .then(() => {
+                                formContainer.style.width = '0%';
+                            })
+                            .catch((error) => {
+                                console.error('Error updating document: ', error);
+                            });
+                        }
+                    };
+
+                    // Hide the 'Post' button when the 'Edit' button is clicked
+                    if (postButton) {
+                        postButton.style.display = 'none';
+                    }
+
+                    document.querySelector('.form').appendChild(editPostButton);
+                });
+
+                postItem.innerHTML = `
+                <span>${post.data().text}</span>
+                <br>
+                <span style="font-size:8px;">${post.data().datenow}</span>
+                `;
+                postItem.appendChild(deleteButton);
+                postItem.appendChild(editButton);
+                postList.appendChild(postItem);
+            });
+        }
+
+
+        // Function to delete a post from Firestore
+        function deletePost(postId) {
+            firestore.collection('posts').doc(postId).delete()
+            .then(() => {
+                console.log('Document successfully deleted!');
+            })
+            .catch((error) => {
+                console.error('Error removing document: ',
+                    error);
+            });
+        }
+
+        // Real-time listener for changes in the posts collection
+        firestore.collection('posts').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
+            const posts = snapshot.docs;
+            renderPosts(posts);
+        });
+    </script>
+</body>
+</html>
