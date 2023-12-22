@@ -129,6 +129,8 @@
             color: #FAF9F6;
             position: fixed;
             padding: 10px;
+            /*hide if not me*/
+            display: none;
             bottom: 5%;
             right: 5%;
         }
@@ -167,6 +169,7 @@
             border-radius: 12px;
             outline: none;
             padding: 6px;
+            display: none;
             width: 100%;
         }
 @keyframes fade {
@@ -345,6 +348,53 @@
             const posts = snapshot.docs;
             renderPosts(posts);
         });
+        // Variable to store the last visible document
+        let lastVisible = null;
+
+        // Function to fetch initial posts
+        function fetchInitialPosts() {
+            firestore.collection('posts')
+            .orderBy('timestamp', 'desc')
+            .limit(10)
+            .onSnapshot((snapshot) => {
+                const posts = snapshot.docs;
+                renderPosts(posts);
+                lastVisible = snapshot.docs[snapshot.docs.length - 1];
+            });
+        }
+
+        // Function to fetch more posts when scrolling to the bottom
+        let unsubscribeFetchMore = null; // Declare a global variable to hold the listener for fetching more posts
+
+        function fetchMorePosts() {
+            if (unsubscribeFetchMore) {
+                unsubscribeFetchMore(); // Detach the previous listener
+            }
+
+            unsubscribeFetchMore = firestore.collection('posts')
+            .orderBy('timestamp', 'desc')
+            .startAfter(lastVisible)
+            .limit(10)
+            .onSnapshot((snapshot) => {
+                const posts = snapshot.docs;
+                renderPosts(posts);
+                lastVisible = snapshot.docs[snapshot.docs.length - 1];
+            });
+        }
+
+
+        // Event listener for scrolling
+        window.addEventListener('scroll', () => {
+            const {
+                scrollTop, scrollHeight, clientHeight
+            } = document.documentElement;
+            if (scrollTop + clientHeight >= scrollHeight - 5) {
+                fetchMorePosts();
+            }
+        });
+
+        // Call fetchInitialPosts to load the first set of posts
+        fetchInitialPosts();
     </script>
 </body>
 </html>
