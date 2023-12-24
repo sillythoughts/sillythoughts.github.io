@@ -7,7 +7,7 @@
     <meta name="keywords" content="">
     <title>Rant?</title>
     <style>
-@font-face {
+    @font-face {
         font-family: Bookman;
         src: url('Bookman.otf');
         font-display: swap;
@@ -162,13 +162,14 @@
             top: 0;
         }
         .delete, .edit {
-            display: none;
+            display: grid;
             margin-top: 6px;
             border: none;
             border-radius: 12px;
             outline: none;
             padding: 6px;
             width: 100%;
+            display: none;
         }
 @keyframes fade {
             0% {
@@ -261,11 +262,30 @@
 
         // close form
         function closeForm() {
-            let closeFormBtn = document.querySelector('.close-form-btn');
-            closeFormBtn.addEventListener('click', () => {
-                let formContainer = document.querySelector('.form-container');
-                formContainer.style.width = '0%';
-            });
+            let formContainer = document.querySelector('.form-container');
+            formContainer.style.width = '0%';
+
+            const postInput = document.getElementById('postInput');
+            postInput.value = ''; // Reset the form input value
+
+            const editPostButton = document.getElementById('editPostButton');
+            if (editPostButton) {
+                editPostButton.remove(); // Remove the 'Edit Post' button if it exists
+            }
+
+            const cancelButton = document.getElementById('cancelEditButton');
+            if (cancelButton) {
+                cancelButton.remove(); // Remove the 'Cancel' button if it exists
+            }
+
+            const postButton = document.createElement('button');
+            postButton.textContent = 'Post';
+
+            postButton.onclick = () => {
+                addPost();
+            };
+
+            document.querySelector('.form').appendChild(postButton);
         }
 
         // Function to render the posts on the webpage
@@ -285,45 +305,54 @@
                 const editButton = document.createElement('button');
                 editButton.className = "edit"
                 editButton.textContent = 'Edit';
-                editButton.addEventListener('click', () => {
-                    const formContainer = document.querySelector('.form-container');
-                    const postInput = document.getElementById('postInput');
-                    const postButton = document.querySelector('.form button');
-
+                function handleEditClick(post, formContainer, postInput) {
                     formContainer.style.width = '100%';
                     postInput.value = post.data().text;
 
-                    const editPostButton = document.createElement('button');
-                    editPostButton.textContent = 'Edit Post';
-                    editPostButton.id = 'editPostButton';
+                    const editPostButton = document.getElementById('editPostButton');
 
-                    editPostButton.onclick = () => {
+                    if (editPostButton) {
+                        editPostButton.remove(); // Remove the existing 'Edit Post' button
+                    }
+
+                    const postButton = document.querySelector('.form button');
+
+                    if (postButton) {
+                        postButton.remove(); // Remove the 'Post' button
+                    }
+
+                    const newEditPostButton = document.createElement('button');
+                    newEditPostButton.textContent = 'Edit Post';
+                    newEditPostButton.id = 'editPostButton';
+
+                    newEditPostButton.onclick = () => {
                         const updatedText = postInput.value.trim();
                         if (updatedText !== '') {
                             firestore.collection('posts').doc(post.id).update({
                                 text: updatedText,
                             })
                             .then(() => {
+                                postInput.value = '';
                                 formContainer.style.width = '0%';
 
-                                // Update the UI after editing the post
                                 const postList = document.getElementById('postList');
-                                postList.innerHTML = ''; // Clear existing posts
-                                fetchInitialPosts(); // Fetch and render new posts
+                                postList.innerHTML = '';
+                                fetchInitialPosts();
                             })
-
                             .catch((error) => {
                                 console.error('Error updating document: ', error);
                             });
                         }
                     };
 
-                    // Hide the 'Post' button when the 'Edit' button is clicked
-                    if (postButton) {
-                        postButton.style.display = 'none';
-                    }
+                    document.querySelector('.form').appendChild(newEditPostButton);
+                }
 
-                    document.querySelector('.form').appendChild(editPostButton);
+                editButton.addEventListener('click', () => {
+                    const formContainer = document.querySelector('.form-container');
+                    const postInput = document.getElementById('postInput');
+
+                    handleEditClick(post, formContainer, postInput);
                 });
 
                 postItem.innerHTML = `
@@ -361,7 +390,8 @@
         // Function to fetch initial posts
         function fetchInitialPosts() {
             firestore.collection('posts')
-            .orderBy('timestamp', 'desc')
+            .orderBy('timestamp',
+                'desc')
             .limit(7)
             .onSnapshot((snapshot) => {
                 const posts = snapshot.docs;
