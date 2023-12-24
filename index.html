@@ -240,8 +240,8 @@
                     console.error('Error adding document: ', error);
                 });
             }
-
         }
+        
         // show form function
         function showForm() {
             let showFormBtn = document.querySelector('.show-form-btn');
@@ -325,7 +325,6 @@
             }
         }
 
-
         // Function to render the posts on the webpage
         function appendFetchedPosts(posts) {
             const postList = document.getElementById('postList');
@@ -336,10 +335,9 @@
                 const deleteButton = document.createElement('button');
                 deleteButton.className = "delete"
                 deleteButton.textContent = 'Delete';
-                deleteButton.addEventListener('click', () => {
+                deleteButton.onclick = function() {
                     deletePost(post.id);
-                    fetchInitialPosts();
-                });
+                };
 
                 const editButton = document.createElement('button');
                 editButton.className = "edit"
@@ -414,7 +412,6 @@
                 // Update the UI after deleting the post
                 const postList = document.getElementById('postList');
                 postList.innerHTML = ''; // Clear existing posts
-                fetchInitialPosts(); // Fetch and render new posts
             })
 
             .catch((error) => {
