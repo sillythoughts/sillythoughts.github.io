@@ -7,7 +7,7 @@
     <meta name="keywords" content="">
     <title>Rant?</title>
     <style>
-    @font-face {
+@font-face {
         font-family: Bookman;
         src: url('Bookman.otf');
         font-display: swap;
@@ -193,7 +193,6 @@
         <button class="close-form-btn" onclick="closeForm()">×</button>
         <div class="form">
             <textarea id="postInput" rows="7" required="required"></textarea>
-            <button onclick="addPost()">Post</button>
         </div>
     </div>
 
@@ -243,7 +242,7 @@
             }
 
         }
-
+        // hide edit and add post
         // show form function
         function showForm() {
             let showFormBtn = document.querySelector('.show-form-btn');
@@ -252,6 +251,34 @@
                 formContainer.style.width = '100%';
 
             });
+            const existingPostButton = document.getElementById('postButton');
+            if (!existingPostButton) {
+                const postButton = document.createElement('button');
+                postButton.textContent = 'Post';
+                postButton.id = 'postButton';
+
+                postButton.onclick = () => {
+                    addPost();
+                };
+
+                const form = document.querySelector('.form');
+                const formButtons = form.querySelectorAll('button');
+                let postButtonExists = false;
+
+                formButtons.forEach((button) => {
+                    if (button.id === 'postButton') {
+                        postButtonExists = true;
+                    }
+                });
+
+                if (!postButtonExists) {
+                    form.appendChild(postButton); // Append the 'Post' button if it doesn't exist
+                }
+            }
+            const editPostButton = document.getElementById('editPostButton');
+            if (editPostButton) {
+                editPostButton.remove(); // Remove the 'Edit Post' button if it exists
+            }
         }
 
         // hide form function
@@ -273,20 +300,32 @@
                 editPostButton.remove(); // Remove the 'Edit Post' button if it exists
             }
 
-            const cancelButton = document.getElementById('cancelEditButton');
-            if (cancelButton) {
-                cancelButton.remove(); // Remove the 'Cancel' button if it exists
+            const existingPostButton = document.getElementById('postButton');
+            if (!existingPostButton) {
+                const postButton = document.createElement('button');
+                postButton.textContent = 'Post';
+                postButton.id = 'postButton';
+
+                postButton.onclick = () => {
+                    addPost();
+                };
+
+                const form = document.querySelector('.form');
+                const formButtons = form.querySelectorAll('button');
+                let postButtonExists = false;
+
+                formButtons.forEach((button) => {
+                    if (button.id === 'postButton') {
+                        postButtonExists = true;
+                    }
+                });
+
+                if (!postButtonExists) {
+                    form.appendChild(postButton); // Append the 'Post' button if it doesn't exist
+                }
             }
-
-            const postButton = document.createElement('button');
-            postButton.textContent = 'Post';
-
-            postButton.onclick = () => {
-                addPost();
-            };
-
-            document.querySelector('.form').appendChild(postButton);
         }
+
 
         // Function to render the posts on the webpage
         function appendFetchedPosts(posts) {
