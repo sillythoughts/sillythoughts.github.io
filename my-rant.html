@@ -240,7 +240,6 @@
             }
 
         }
-        // hide edit and add post
         // show form function
         function showForm() {
             let showFormBtn = document.querySelector('.show-form-btn');
@@ -337,6 +336,7 @@
                 deleteButton.textContent = 'Delete';
                 deleteButton.addEventListener('click', () => {
                     deletePost(post.id);
+                    fetchInitialPosts();
                 });
 
                 const editButton = document.createElement('button');
