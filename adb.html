@@ -1,0 +1,828 @@
+<!doctype html>
+<html>
+ <head> 
+  <title>AudioBook</title> 
+  <meta charset="UTF-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    <link rel="stylesheet" 
+        href= 
+"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"> 
+<meta name="keywords" content="This website provides you e-books and audios that you can download, read and listen to for free., free ebooks, ebook, download ebook for free, download audio, free pdf, download pdf free, free proramming book, programming ebook, programming pdf">
+<meta name="description" content="This website provides you e-books and audios that you can download, read and listen to for free.">
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Amarante&family=Amita&family=Bokor&family=Bubblegum+Sans&family=Chakra+Petch:wght@300&family=Chicle&family=Forum&family=Grenze+Gotisch&family=IM+Fell+English+SC&family=Metal+Mania&family=Milonga&family=Montserrat:wght@300&family=Nova+Cut&family=Nova+Flat&family=Poppins&family=Quantico&family=Righteous&family=Rowdies:wght@300&family=Trade+Winds&display=swap');
+
+/***line 583 to change or add music***/
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+#audio{
+    display: none;
+}
+/*mp style*/
+.player { 
+  width: 100%;
+  height: 50%;
+  display: flex; 
+  margin: auto;
+  align-items: center; 
+  flex-direction: column; 
+  justify-content: center; 
+} 
+.row-mp{
+    background: linear-gradient(to bottom, #000, #2e2e2e);
+    width: 95%;
+    margin: auto;
+    display: flex;
+    border: 5px outset #ede;
+    margin: 10px;
+}
+.details { 
+  display: flex; 
+  align-items: center; 
+  flex-direction: column; 
+  justify-content: center; 
+  margin-top: 25px!important;
+  color: #fff;
+} 
+.track-art{ 
+  margin: 25px;
+  height: 250px; 
+  width: 250px; 
+  background-image: URL( 
+     "https://cdn.pixabay.com/photo/2013/07/13/12/07/record-159211__340.png"); 
+  background-size: cover; 
+  background-position: center; 
+  border-radius: 15%; 
+} 
+/* Changing the font sizes to suitable ones */
+.now-playing { 
+ font-size: 1rem; 
+} 
+.track-name { 
+  font-size: 3rem; 
+  text-align: center;
+} 
+.track-artist { 
+  font-size: 1.5rem; 
+} 
+/* Using flex with the row direction to 
+   align items in a horizontal direction */
+.buttons { 
+  display: flex; 
+  flex-direction: row; 
+  align-items: center; 
+  color: #fff;
+} 
+.playpause-track, 
+.prev-track, 
+.next-track { 
+  padding: 25px; 
+  opacity: 0.8; 
+  /* Smoothly transition the opacity */
+  transition: opacity .2s; 
+  color: #fff;
+} 
+/* Change the opacity when mouse is hovered */
+.playpause-track:hover, 
+.prev-track:hover, 
+.next-track:hover { 
+  opacity: 1.0; 
+  color: #fff;
+} 
+/* Define the slider width so that it scales properly */
+.slider_container { 
+  width: 75%; 
+  max-width: 400px; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  color: #fff;
+} 
+/* Modify the appearance of the slider */
+.seek_slider, .volume_slider { 
+  -webkit-appearance: none; 
+  -moz-appearance: none; 
+  appearance: none; 
+  height: 5px; 
+  background: black; 
+  opacity: 0.7; 
+  -webkit-transition: .2s; 
+  transition: opacity .2s; 
+} 
+/* Modify the appearance of the slider thumb */
+.seek_slider::-webkit-slider-thumb, 
+.volume_slider::-webkit-slider-thumb { 
+  -webkit-appearance: none; 
+  -moz-appearance: none; 
+  appearance: none; 
+  width: 15px; 
+  height: 15px; 
+  background: white; 
+  cursor: pointer; 
+  border-radius: 50%; 
+  color: #fff;
+} 
+/* Change the opacity when mouse is hovered */
+.seek_slider:hover, 
+.volume_slider:hover { 
+  opacity: 1.0; 
+} 
+.seek_slider { 
+  width: 60%; 
+  color: #fff;
+} 
+.volume_slider { 
+  width: 30%; 
+  color: #fff;
+} 
+.current-time, 
+.total-duration { 
+  padding: 10px; 
+} 
+i.fa-volume-down, 
+i.fa-volume-up { 
+  padding: 10px; 
+} 
+/* Change the mouse cursor to a pointer 
+   when hovered over */
+i.fa-play-circle, 
+i.fa-pause-circle, 
+i.fa-step-forward, 
+i.fa-step-backward { 
+  cursor: pointer; 
+  color: #fff;
+}
+html, body{
+  font-family: Nova Flat;
+  width: 100%;
+  height: 100%;
+  background: #262626}/*
+p{
+    font-size: 16px;
+    font-family: inherit;
+    text-align: center;
+}*/
+#mySearch {
+  width: 100%;
+  font-size: 20px;
+  padding: 10px;
+  border: 2.5px solid #030303;
+  text-align: center;
+  outline: none;
+  border-radius: 10px;
+  margin-top: 8px;
+}
+#myMenu {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  margin-top: 10px;
+}
+#myMenu li {
+  margin: 8px;
+  padding: 10px;
+  text-decoration: none;
+  color: #fff;
+  display: block;
+  background: linear-gradient(to bottom, #000, #2e2e2e);
+  text-align: center;
+  border: 1px solid white;
+  font-size: 30px;
+  border-radius: 10px;
+/*box-shadow: 0 5px 8px 0 rgba(255, 255, 255, 0.15),
+0 5px 10px 0 rgba(255, 255, 255, 0.19);*/
+}
+.head{
+    margin-top: 8px !important;
+    margin: auto;
+    width: 98%;
+    height: fit;
+    border: 5px inset black;
+    background: #030303;
+    color: #fff;
+    text-align: center;
+}
+.head h1{
+  width: 100%;
+  height: fit;
+  font-size: 70px;
+  color: white;
+  font-family: rowdies;
+  text-align: center;
+  padding: 30px;
+}
+.head p{
+    padding: 8px;
+    font-size: 18px;
+}
+#myMenu li img{
+    width: 100%;
+    height: fit;
+    border-radius: 5.5px;
+    padding: 10px;
+}
+#myMenu li h2{
+    font-size: 20px;
+}
+.container{
+    display: grid;
+    grid-auto-columns: 1;
+    width: 98%;
+    grid-template-columns: auto-fit;
+}
+input{
+    font-family: Chakra Petch;
+}
+button{
+    width: 100%;
+    margin-top: 8px;
+    padding: 6px;
+    border: 3px outset darksalmon;
+    outline: none;
+    border-radius: 10px;
+    color: #fff;
+    background: salmon;
+    font-family: Righteous;
+    font-size: 16px;
+}
+.tags-container{
+    display: grid;
+    grid-template-rows: auto-fit;
+    width: 98%;
+    background: #000;
+    margin: auto;
+    color: #fff;
+    border: 5px solid #262626;
+    margin-top: 8px;
+    border-radius: 15px;
+}
+.tags-container h2{
+    text-align: center;
+    padding: 16px;
+}
+.tags{
+    display: flex;
+    overflow: auto;
+    width: 100%;
+    margin-bottom: 15px!important;
+}
+.tags::-webkit-scrollbar {
+ display: none;
+}
+.tags{
+ scrollbar-width: none;
+}
+.tags a{
+    padding: 12px;
+    text-decoration: none;
+    color: #fff;
+    font-size: 18px;
+    text-align: center;
+    width: 100%;
+}
+.tags a:hover{
+    background: salmon;
+}
+.footer{
+  padding: 12px;
+  background-color: #030303;
+  color: #fff;
+  text-align: center;
+}
+.direct-ads button{
+    display: block;
+    position: fixed;
+    left: 83.5%;
+    bottom: 18px;
+    height: 65px;
+    width: 65px;
+    border: 5px solid darksalmon;
+    border-radius: 50%;*/
+    outline: none;
+background: linear-gradient(to top, salmon ,lightsalmon);
+}
+.direct-ads button p{
+    font-family: rowdies;
+    margin: auto;
+    font-size: 25px;
+    color: darkgreen;
+    text-align: center;
+}
+.top{
+    position: fixed;
+    display: block;
+    top: 0%;
+    text-align: center;
+    left: 89%;
+    color: #fff;
+    background: #494a49;
+    font-size: 30px;
+}
+.bd{ /*bood description*/
+    font-size: 16px;
+    padding: 10px;
+    text-align: justify;
+    background: #262626;
+    border: 2.5px double #000;
+    border-radius: 5.5px;
+}
+.navbar{
+    display: flex;
+    width: 98%;
+    margin: auto;
+    background: #030303;
+    margin-top: 8px;
+    border: 3px solid #262626;
+    border-radius: 10px;
+}
+.navbar a{
+    width: 100%;
+    text-align: center;
+    padding: 14px 16px;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 10px;
+}
+.navbar a:hover{
+    background: salmon;
+}
+@media screen and (min-width: 600px){
+    #myMenu{
+        display: grid;
+        overflow-wrap: break;
+        grid-template-columns: 50% auto;
+    }
+    #top{
+        font-size: 150px;
+    }
+    .bd{
+        font-size: 10px;
+    }
+    .direct-ads button{
+    display: block;
+    position: fixed;
+    left: 90%;
+    bottom: 18px;
+    height: 85px;
+    width: 85px;
+    border: 5px solid darksalmon;
+    border-radius: 50%;*/
+    outline: none;
+background: linear-gradient(to top, salmon ,lightsalmon);
+    }
+    .top{
+    position: fixed;
+    display: block;
+    top: 0%;
+    text-align: center;
+    left: 90%;
+    color: #fff;
+    background: #494a49;
+    font-size: 45px;
+}
+.player { 
+  height: 100vh;
+  width: 100vw;
+}
+.details { 
+    width: 100%;
+  display: flex; 
+  align-items: center; 
+  flex-direction: column; 
+  justify-content: center; 
+  margin-top: 25px!important;
+  color: #fff;
+} 
+.track-art{ 
+  margin: 50px;
+  height: 500px; 
+  width: 500px; 
+  background-image: URL( 
+     "https://source.unsplash.com/Qrspubmx6kE/640x360"); 
+  background-size: cover; 
+  background-position: center; 
+  border-radius: 15%; 
+} 
+}
+</style> 
+ </head> 
+ <body> 
+<a href="#top"><h1 class="top">↑↑↑</h1></a>
+ <div class="direct-ads">
+ <a href="https://recutt.com/UYuP/24682854"><button><p>$</p></button></a>
+ </div>
+ <div class="head">
+  <h1 id="top">AudioBook</h1> 
+  <p><span style="font-size: 25px;">Welcome to AudioBook!</span> <br><br> This website provides you e-books and audios that you can download, read and listen to for free.</p>
+</div>
+<center>
+<div style="margin-top: 12px;">
+<script type="text/javascript">
+	atOptions = {
+		'key' : 'a34ed68536212bbc513b3d5f1c9fbbfd',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+	document.write('<scr' + 'ipt type="text/javascript" src="http' + (location.protocol === 'https:' ? 's' : '') + '://www.effectivedisplayformats.com/a34ed68536212bbc513b3d5f1c9fbbfd/invoke.js"></scr' + 'ipt>');
+</script>
+</div></center>
+<div class="navbar">
+    <a onclick="myFunction()" onclick='document.getElementById("ebook")'>Ebook</a>
+    <a onclick="myFunction1()">Audio</a>
+</div>
+<!--ebook container-->
+<div id="ebook">
+  <div class="tags-container">
+      <h2>Categories</h2>
+  <div class="tags" style="margin: auto; width: 90%; border: 3px inset #fff;">
+        <!--<a href="#">Link</a>
+        <a href="#">Link</a>
+        <a href="#">Link</a>
+        <a href="#">Link</a>
+        <a href="#">Link</a>
+        <a href="#">Link</a>
+        <a href="#">Link</a>
+        <a href="#">Link</a>
+        <a href="#">Link</a>-->
+        <a>—No Categories—</a>
+    </div>
+    </div>
+
+  <div class="row"> 
+<input type="text" id="mySearch" onkeyup="myFunction18()" placeholder="Filter search..." title="Type in a category">
+    <ul id="myMenu">
+           <li><h2>Notes for CSS</h2><br><hr><img src="https://goalkicker.com/CSSBook/CSSGrow.png"><br><a href="https://goalkicker.com/CSSBook/CSSNotesForProfessionals.pdf" download="Learn CSS.pdf"><button>Download (PDF)</button></a></li>
+          <li><h2>Notes for HTML 5</h2><br><hr><img src="https://goalkicker.com/HTML5Book/HTML5Grow.png"><br><a href="https://goalkicker.com/HTML5Book/HTML5NotesForProfessionals.pdf" download="Learn HTML 5.pdf"><button>Download (PDF)</button></a></li>
+                    <li><h2>Notes for Kotlin</h2><br><hr><img src="https://goalkicker.com/KotlinBook/KotlinGrow.png"><br><a href="https://goalkicker.com/KotlinBook/KotlinNotesForProfessionals.pdf" download="Learn Kotlin Programming.pdf"><button>Download (PDF)</button></a></li>
+                  <li><h2>Treasure Island</h2><br><hr><img src="https://www.gutenberg.org/cache/epub/120/pg120.cover.medium.jpg"><br><a href="https://www.gutenberg.org/ebooks/120.epub.images?session_id=f270c7f84d89e167ca59bdc83bf9cde26a1ce3ba" download="Treasure Island.epub."><button>Download (.epub74+mb)</button><a href="https://www.archive.org/download/treasureisland_librivox/treasureisland_librivox_64kb_mp3.zip" download="Treasure Island.zip"><button>Download Audiobook (211+mb)</button></a></a></li>
+            <li><h2>Notes for JavaScript</h2><br><hr><img src="https://goalkicker.com/JavaScriptBook/JavaScriptGrow.png"><br><a href="https://goalkicker.com/JavaScriptBook/JavaScriptNotesForProfessionals.pdf" download="Learn JavaScript Programming.pdf"><button>Download (PDF)</button></a></li>
+    <li><h2>Notes for Java</h2><br><hr><img src="https://goalkicker.com/JavaBook/JavaGrow.png"><br><a href="https://goalkicker.com/JavaBook/JavaNotesForProfessionals.pdf" download="Learn Java Programming.pdf"><button>Download (PDF)</button></a></li>
+              <li><h2>The Great Gatsby</h2><br><hr><img src="https://ia803403.us.archive.org/34/items/greatgatsby_2101_librivox/great_gatsby_2101.jpg"><br><a href="https://www.gutenberg.org/ebooks/64317.epub.images?session_id=f270c7f84d89e167ca59bdc83bf9cde26a1ce3ba" download="The Great Gatsby.epub."><button>Download (.epub)</button><a href="https://www.archive.org/download//greatgatsby_2101_librivox/greatgatsby_2101_librivox_64kb_mp3.zip" download="The Great Gatsby.zip"><button>Download Audiobook (146+mb)</button></a></a></li>
+            <li><h2>Notes for TypeScript</h2><br><hr><img src="https://goalkicker.com/TypeScriptBook2/TypeScriptGrow.png"><br><a href="https://goalkicker.com/TypeScriptBook2/TypeScriptNotesForProfessionals.pdf" download="Learn TypeScript Programming.pdf"><button>Download (PDF)</button></a></li>
+        <li><h2>Notes for PHP</h2><br><hr><img src="https://goalkicker.com/PHPBook/PHPGrow.png"><br><a href="https://goalkicker.com/PHPBook/PHPNotesForProfessionals.pdf" download="Learn PHP Programming.pdf"><button>Download (PDF)</button></a></li>
+        <li><h2>Peter Pan</h2><br><hr><img src="https://ia802809.us.archive.org/12/items/LibrivoxCdCoverArt12/Peter_Pan_1109.jpg"><br><a href="https://www.gutenberg.org/ebooks/16.epub.noimages?session_id=f270c7f84d89e167ca59bdc83bf9cde26a1ce3ba" download="Peter Pan.epub."><button>Download (.epub)</button><a href="https://www.archive.org/download/peter_pan_0707_librivox/peter_pan_0707_librivox_64kb_mp3.zip" download="Peter Pan.zip"><button>Download Audiobook (146+mb)</button></a></a></li>
+    <li><h2>Notes for C</h2><br><hr><img src="https://goalkicker.com/CBook/CGrow.png"><br><a href="https://goalkicker.com/CBook/CNotesForProfessionals.pdf" download="Learn C Programming.pdf"><button>Download (PDF)</button></a></li>
+        <li><h2>Alice's Adventures in Wonderland</h2><br><hr><img src="https://ia800908.us.archive.org/8/items/LibrivoxCdCoverArt33/Alice_in_Wonderland_1310.jpg"><br><a href="https://www.gutenberg.org/ebooks/11.epub.images?session_id=f270c7f84d89e167ca59bdc83bf9cde26a1ce3ba" download="Alice's Adventures in Wonderland.epub"><button>Download Epub</button></a><a href="https://www.archive.org/download//aliceinwonderland_drama_1310_librivox/aliceinwonderland_drama_1310_librivox_64kb_mp3.zip" download="Alice's in Wonderland Audiobook.zip"><button>Download Audiobook (47+mb)</button></a></li>
+                <li><h2>The Adventures of Tom Sawyer</h2><br><hr><img src="https://www.gutenberg.org/cache/epub/74/pg74.cover.medium.jpg"><br><a href="https://www.gutenberg.org/ebooks/74.epub.images?session_id=f270c7f84d89e167ca59bdc83bf9cde26a1ce3ba" download="The Adventures of Tom Sawyer.epub"><button>Download Epub (15+mb)</button></a><a href="https://www.archive.org/download//adventures_of_tom_sawyer_1402_librivox/adventures_of_tom_sawyer_1402_librivox_64kb_mp3.zip" download="The Adventures of Tom Sawyer Audiobook.zip"><button>Download Audiobook (225+mb)</button></a></li>
+     <li><h2>Notes for C#</h2><br><hr><img src="https://goalkicker.com/CSharpBook/CSharpGrow.png"><a href="https://goalkicker.com/CSharpBook/CSharpNotesForProfessionals.pdf" download="Learn C# Programming.pdf"><button>Download</button></a></li> 
+             <li><h2>The Wonderful Wizard of Oz</h2><br><hr><img src="https://www.gutenberg.org/cache/epub/55/pg55.cover.medium.jpg"><br><a href="https://www.gutenberg.org/ebooks/55.epub.images?session_id=f270c7f84d89e167ca59bdc83bf9cde26a1ce3ba" download="The Wonderful Wizard of Oz.epub"><button>Download Epub</button></a><a href="https://www.archive.org/download/wizard_of_oz/wizard_of_oz_64kb_mp3.zip" download="The Wonderful Wizard of Oz Audiobook.zip"><button>Download Audiobook (103+mb)</button></a></li>
+     <li><h2>Notes for C++</h2><br><hr><img src="https://goalkicker.com/CPlusPlusBook/CPlusPlusGrow.png"><a href="https://goalkicker.com/CPlusPlusBook/CPlusPlusNotesForProfessionals.pdf" download="Learn C++ Programming.pdf"><button>Download (PDF)</button></a></li> 
+ <li><h2>Pride and Prejudice</h2><br><hr><img src="https://www.gutenberg.org/cache/epub/1342/pg1342.cover.medium.jpg"><a href="https://www.gutenberg.org/ebooks/1342.epub.images?session_id=f270c7f84d89e167ca59bdc83bf9cde26a1ce3ba" download="Pride and Prejudice.epub"><button>Download (.epub)</button></a><a href="https://www.archive.org/download/pride_and_prejudice_librivox/pride_and_prejudice_librivox_64kb_mp3.zip" download="Pride and Prejudice.zip"><button>Download Audiobook (368+mb)</button></a></li>
+  <li><h2>Frankenstein; or the Modern Prometheus</h2><br><hr><img src="https://ia902809.us.archive.org/12/items/LibrivoxCdCoverArt12/Frankenstein_1111.jpg"><a href="https://www.gutenberg.org/ebooks/84.epub.noimages?session_id=f270c7f84d89e167ca59bdc83bf9cde26a1ce3ba" download="Frankenstein; or the Modern Prometheus.epub"><button>Download (.epub)</button></a><a href="https://www.archive.org/download/frankenstein_cs_librivox/frankenstein_cs_librivox_64kb_mp3.zip" download="Frankenstein; or the Modern Prometheus.zip"><button>Download Audiobook (230+mb)</button></a></li>
+    <li><h2>The Adventures of Sherlock Holmes</h2><br><hr><img src="https://www.gutenberg.org/cache/epub/1661/pg1661.cover.medium.jpg"><a href="https://www.gutenberg.org/ebooks/1661.epub.noimages?session_id=f270c7f84d89e167ca59bdc83bf9cde26a1ce3ba" download="The Adventures of Sherlock Holmes.epub"><button>Download (.epub)</button></a><a href="https://www.archive.org/download/adventures_holmes/adventures_holmes_64kb_mp3.zip" download="The Adventures of Sherlock Holmes.zip"><button>Download Audiobook (296+mb)</button></a></li>
+    <li><h2>The Odyssey</h2><br><hr><img src="https://ia600302.us.archive.org/16/items/librivox_cd_covers/odyssey.jpg"><a href="https://www.gutenberg.org/ebooks/1727.epub.images?session_id=f270c7f84d89e167ca59bdc83bf9cde26a1ce3ba" download="The Odyssey.epub"><button>Download (.epub)</button></a><a href="https://www.archive.org/download/odyssey_butler_librivox/odyssey_butler_librivox_64kb_mp3.zip" download="The Odyssey.zip"><button>Download Audiobook (318+mb)</button></a></li>
+    </ul> 
+   </div></div>
+<!--end of ebook container-->
+<!--audio container-->
+<div id="audio">
+         <div class="tags-container">
+      <h2>Audio List</h2>
+  <div class="tags" style="margin: auto; width: 90%; border: 3px inset #fff;">
+       <!--  <a href="#">Link</a>
+        <a href="#">Link</a>
+        <a href="#">Link</a>
+        <a href="#">Link</a>
+        <a href="#">Link</a>
+        <a href="#">Link</a>
+        <a href="#">Link</a>
+        <a href="#">Link</a>
+        <a href="#">Link</a>-->
+        <a>—No Audio in List—</a>
+    </div>
+    </div>
+  <div class="row-mp"> 
+  <div class="player"> 
+    <!-- Define the section for displaying details -->
+    <div class="details"> 
+      <div class="track-art"></div> 
+      <div class="track-name">Track Name</div> 
+      <div class="track-artist">Track Artist</div> 
+    </div> 
+    <!-- Define the section for displaying track buttons -->
+    <div class="buttons"> 
+      <div class="prev-track" onclick="prevTrack()">
+        <i class="fa fa-step-backward fa-2x"></i> 
+      </div> 
+      <div class="playpause-track" onclick="playpauseTrack()"> 
+        <i class="fa fa-play-circle fa-5x"></i> 
+      </div> 
+      <div class="next-track" onclick="nextTrack()">
+        <i class="fa fa-step-forward fa-2x"></i> 
+      </div> 
+    </div> 
+    <!-- Define the section for displaying the seek slider-->
+    <div class="slider_container"> 
+      <div class="current-time">00:00</div> 
+      <input type="range" min="1" max="100"
+        value="0" class="seek_slider" onchange="seekTo()"> 
+      <div class="total-duration">00:00</div> 
+    </div> 
+    <!-- Define the section for displaying the volume slider-->
+    <div class="slider_container"> 
+      <i class="fa fa-volume-down"></i> 
+      <input type="range" min="1" max="100"
+        value="99" class="volume_slider" onchange="setVolume()"> 
+      <i class="fa fa-volume-up"></i> 
+    </div> 
+  </div> 
+   </div>
+   </div>
+<!--end of audio container-->
+     <div class="footer" style="font-family: Poppins;"> 
+   <h3>>>Thank You<<</h3> 
+  </div> 
+   <script>
+function myFunction18() {
+  var input, filter, ul, li, h2, i;
+  input = document.getElementById("mySearch");
+  filter = input.value.toUpperCase();
+  ul = document.getElementById("myMenu");
+  li = ul.getElementsByTagName("li");
+  for (i = 0; i < li.length; i++) {
+    h2 = li[i].getElementsByTagName("h2")[0];
+    if (h2.innerHTML.toUpperCase().indexOf(filter) > -1) {
+      li[i].style.display = "";
+    } else {
+      li[i].style.display = "none";
+    }
+  }
+}
+</script>
+<!-- display ebook-->
+<script>
+function myFunction() {
+  var x = document.getElementById("ebook")
+  var y = document.getElementById("audio")
+  if (x.style.display === "none"){
+ x.style.display = "block";
+ y.style.display = "none"
+  } else {
+  x.style.display = "block"
+  }
+}
+</script>
+<!--display audio-->
+<script>
+function myFunction1() {
+  var x = document.getElementById("audio")
+  var y = document.getElementById("ebook")
+  if (y.style.display === "none"){
+         x.style.display = "block";
+  } else {
+    x.style.display = "block";
+    y.style.display = "none";
+  }
+}
+</script>
+<!--ap script-->
+  <!-- Load the main script for the player -->
+  <script>
+      // Select all the elements in the HTML page 
+// and assign them to a variable 
+// let now_playing = document.querySelector(".now-playing");
+let track_art = document.querySelector(".track-art"); 
+let track_name = document.querySelector(".track-name"); 
+let track_artist = document.querySelector(".track-artist"); 
+let playpause_btn = document.querySelector(".playpause-track"); 
+
+let next_btn = document.querySelector(".next-track"); 
+let prev_btn = document.querySelector(".prev-track"); 
+let seek_slider = document.querySelector(".seek_slider"); 
+let volume_slider = document.querySelector(".volume_slider"); 
+let curr_time = document.querySelector(".current-time"); 
+let total_duration = document.querySelector(".total-duration"); 
+// Specify globally used values 
+let track_index = 0; 
+let isPlaying = false; 
+let updateTimer; 
+// Create the audio element for the player 
+let curr_track = document.createElement('audio'); 
+// Define the list of tracks that have to be played 
+let track_list = [ 
+  { 
+    name: "Cat Walk", 
+    artist: "", 
+    image: "Image URL", 
+    path: "https://assets.mixkit.co/music/download/mixkit-cat-walk-371.mp3"
+  }, 
+  { 
+    name: "Summer Dream", 
+    artist: "", 
+    image: "Image URL", 
+    path: "https://assets.mixkit.co/music/download/mixkit-summer-dream-628.mp3"
+  }, 
+  { 
+    name: "Tensil and Mistletoe", 
+    artist: "", 
+    image: "Image URL", 
+    path: "https://assets.mixkit.co/music/download/mixkit-tinsel-and-mistletoe-93.mp3", 
+  }, 
+    { 
+    name: "Lonerism", 
+    artist: "", 
+    image: "Image URL", 
+    path: "https://assets.mixkit.co/music/download/mixkit-lonerism-159.mp3", 
+  }, 
+    { 
+    name: "Feeling Happy", 
+    artist: "", 
+    image: "Image URL", 
+    path: "https://assets.mixkit.co/music/download/mixkit-feeling-happy-5.mp3", 
+  }, 
+      { 
+    name: "Happy Home", 
+    artist: "", 
+    image: "Image URL", 
+    path: "https://assets.mixkit.co/music/download/mixkit-happy-home-801.mp3", 
+  }, 
+    { 
+    name: "Magical Moment", 
+    artist: "", 
+    image: "Image URL", 
+    path: "https://assets.mixkit.co/music/download/mixkit-magical-moment-813.mp3", 
+  }, 
+      { 
+    name: "Deep Urban", 
+    artist: "", 
+    image: "Image URL", 
+    path: "https://assets.mixkit.co/music/download/mixkit-deep-urban-623.mp3", 
+  }, 
+  { 
+    name: "Can't Get You of My Mind", 
+    artist: "", 
+    image: "Image URL", 
+    path: "https://assets.mixkit.co/music/download/mixkit-cant-get-you-off-my-mind-1210.mp3", 
+  }, 
+  { 
+    name: "B.O.R.N", 
+    artist: "", 
+    image: "Image URL", 
+    path: "https://assets.mixkit.co/music/download/mixkit-born-620.mp3", 
+  }, 
+    { 
+    name: "Karma", 
+    artist: "", 
+    image: "Image URL", 
+    path: "https://assets.mixkit.co/music/download/mixkit-karma-1183.mp3", 
+  }, 
+  { 
+    name: "Games Worldbeat", 
+    artist: "", 
+    image: "Image URL", 
+    path: "https://assets.mixkit.co/music/download/mixkit-games-worldbeat-466.mp3", 
+  }, 
+  { 
+    name: "Cotton Candy", 
+    artist: "", 
+    image: "Image URL", 
+    path: "https://assets.mixkit.co/music/download/mixkit-cotton-candy-1094.mp3", 
+  }, 
+  { 
+    name: "Raising Me Higher", 
+    artist: "", 
+    image: "Image URL", 
+    path: "https://assets.mixkit.co/music/download/mixkit-raising-me-higher-34.mp3", 
+  }, 
+  { 
+    name: "Talent in the Air", 
+    artist: "", 
+    image: "Image URL", 
+    path: "https://assets.mixkit.co/music/download/mixkit-talent-in-the-air-473.mp3", 
+  }, 
+]
+function loadTrack(track_index) { 
+  // Clear the previous seek timer 
+  clearInterval(updateTimer); 
+  resetValues(); 
+  // Load a new track 
+  curr_track.src = track_list[track_index].path; 
+  curr_track.load(); 
+  // Update details of the track 
+  track_art.style.backgroundImage =  
+     "url(" + track_list[track_index].image + ")"; 
+  track_name.textContent = track_list[track_index].name; 
+  track_artist.textContent = track_list[track_index].artist; 
+  //now_playing.textContent =  
+    // "PLAYING " + (track_index + 1) + " OF " + //track_list.length; 
+  // Set an interval of 1000 milliseconds 
+  // for updating the seek slider 
+  updateTimer = setInterval(seekUpdate, 1000); 
+  // Move to the next track if the current finishes playing 
+  // using the 'ended' event 
+  curr_track.addEventListener("ended", nextTrack);
+  curr_track.play();
+  isPlaying();
+playpause_btn.innerHTML = '<i class="fa fa-play-circle fa-5x"></i>'; 
+isPlaying = true;
+loadTrack(track_index); 
+}
+  // Apply a random background color 
+ // random_bg_color(); 
+//function random_bg_color() { 
+  // Get a random number between 64 to 256 
+  // (for getting lighter colors) 
+// let red = Math.floor(Math.random() * 256) + 64; 
+//  let green = Math.floor(Math.random() * 256) + 64; 
+//  let blue = Math.floor(Math.random() * 256) + 64; 
+  // Construct a color withe the given values 
+  //let bgColor = "rgb(" + red + ", " + green + ", " + blue + ")"; 
+  // Set the background to the new color 
+//  document.body.style.background = bgColor; 
+//} 
+// Function to reset all values to their default 
+function resetValues() { 
+  curr_time.textContent = "00:00"; 
+  total_duration.textContent = "00:00"; 
+  seek_slider.value = 0; 
+}
+function playpauseTrack() { 
+  // Switch between playing and pausing 
+  // depending on the current state 
+  if (!isPlaying) playTrack(); 
+  else pauseTrack(); 
+} 
+function playTrack() { 
+  // Play the loaded track 
+  curr_track.play(); 
+  isPlaying = true; 
+  // Replace icon with the pause icon 
+  playpause_btn.innerHTML = '<i class="fa fa-pause-circle fa-5x"></i>'; 
+} 
+function pauseTrack() { 
+  // Pause the loaded track 
+  curr_track.pause(); 
+  isPlaying = false; 
+  // Replace icon with the play icon 
+  playpause_btn.innerHTML = '<i class="fa fa-play-circle fa-5x"></i>'; 
+} 
+function nextTrack() { 
+  // Go back to the first track if the 
+  // current one is the last in the track list 
+    isPlaying = false; 
+  // Replace icon with the play icon 
+  playpause_btn.innerHTML = '<i class="fa fa-pause-circle fa-5x"></i>'; 
+  if (track_index < track_list.length - 1) 
+    track_index += 1; 
+  else track_index = 0; 
+  // Load and play the new track 
+  loadTrack(track_index); 
+} 
+function prevTrack() { 
+      isPlaying = true; 
+  // Replace icon with the play icon 
+  playpause_btn.innerHTML = '<i class="fa fa-pause-circle fa-5x"></i>'; 
+  // Go back to the last track if the 
+  // current one is the first in the track list 
+  if (track_index > 0) 
+    track_index -= 1; 
+  else track_index = track_list.length - 1; 
+  // Load and play the new track 
+  loadTrack(track_index); 
+  playTrack(); 
+}
+function seekTo() { 
+  // Calculate the seek position by the 
+  // percentage of the seek slider  
+  // and get the relative duration to the track 
+  seekto = curr_track.duration * (seek_slider.value / 100); 
+  // Set the current track position to the calculated seek position 
+  curr_track.currentTime = seekto; 
+}
+function setVolume() { 
+  // Set the volume according to the 
+  // percentage of the volume slider set 
+  curr_track.volume = volume_slider.value / 100; 
+} 
+function seekUpdate() { 
+  let seekPosition = 0; 
+  // Check if the current track duration is a legible number 
+  if (!isNaN(curr_track.duration)) { 
+    seekPosition = curr_track.currentTime * (100 / curr_track.duration); 
+    seek_slider.value = seekPosition; 
+    // Calculate the time left and the total duration 
+    let currentMinutes = Math.floor(curr_track.currentTime / 60); 
+    let currentSeconds = Math.floor(curr_track.currentTime - currentMinutes * 60); 
+    let durationMinutes = Math.floor(curr_track.duration / 60); 
+    let durationSeconds = Math.floor(curr_track.duration - durationMinutes * 60); 
+    // Add a zero to the single digit time values 
+    if (currentSeconds < 10) { currentSeconds = "0" + currentSeconds; } 
+    if (durationSeconds < 10) { durationSeconds = "0" + durationSeconds; } 
+    if (currentMinutes < 10) { currentMinutes = "0" + currentMinutes; } 
+    if (durationMinutes < 10) { durationMinutes = "0" + durationMinutes; } 
+    // Display the updated duration 
+    curr_time.textContent = currentMinutes + ":" + currentSeconds; 
+    total_duration.textContent = durationMinutes + ":" + durationSeconds; 
+  } 
+}
+// Load the first track in the tracklist 
+loadTrack(track_index); 
+  </script> 
+  <script type='text/javascript' src='//pl17132956.safestgatetocontent.com/e4/07/a1/e407a1c394cfc959ed7742bc27144d62.js'></script>
+ </body>
+</html>
