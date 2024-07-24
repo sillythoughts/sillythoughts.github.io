@@ -1,1 +1,1 @@
-# my-rant.github.io
+# His Silly Thoughts
