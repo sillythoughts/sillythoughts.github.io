@@ -1,1 +1,1 @@
-# His Silly Thoughts
+# Thoughts
