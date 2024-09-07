@@ -129,8 +129,10 @@ function appendFetchedPosts(posts) {
     const postDate = post.data().datenow ? formatDate(post.data().datenow): 'Date unavailable';
 
     postItem.innerHTML = `
+    <div>
     <span>${post.data().text}</span>
     <span class="date">${postDate}</span>
+    </div>
     `;
     postItem.appendChild(deleteButton);
     postItem.appendChild(editButton);
