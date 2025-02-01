@@ -18,12 +18,13 @@
 
 body{
   background-color: var(--background-color);
-color: var(--text-color);
+  color: var(--text-color);
 }
 
 a{
   color: #FCFCFC;
 }
+
 h1 {
   text-align: center;
   color: var(--accent-color);
@@ -32,6 +33,7 @@ h1 {
   text-transform: uppercase;
   letter-spacing: 2px;
 }
+
 img,
 input,
 button,
@@ -85,7 +87,9 @@ iframe {
   font-size: 0.8rem;
   color: #bdc3c7;
 }
+
 .button {
+  display: none;
   background-color: var(--secondary-color);
   color: var(--text-color);
   border: none;
@@ -94,6 +98,7 @@ iframe {
   cursor: pointer;
   font-size: 0.9rem;
 }
+
 .delete,
 .edit {
   display: none;
@@ -103,6 +108,7 @@ iframe {
 }
 
 .show-form-btn {
+  display: none;
   position: fixed;
   bottom: 20px;
   right: 20px;
