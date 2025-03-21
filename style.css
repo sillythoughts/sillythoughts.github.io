@@ -70,6 +70,8 @@ iframe {
 .postItem {
   display: grid;
   border-radius: 0.4rem;
+  white-space: pre-wrap;
+  word-break: break-word;
   background-color: var(--primary-color);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   line-height: 1.5;
