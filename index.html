@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Rant - Share your thoughts anonymously">
+  <meta name="keywords" content="rant, anonymous, thoughts, sharing">
+  <title>THOUGHTS</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>THOUGHTS</h1>
+    <ul id="postList"></ul>
+
+    <!-- Pagination controls -->
+    <div id="paginationContainer" class="pagination-container"></div>
+  </div>
+
+  <button class="show-form-btn" onclick="showForm()">+</button>
+
+  <div class="form-container">
+    <button class="close-form-btn" onclick="closeForm()">×</button>
+    <div class="form">
+      <textarea id="postInput" rows="7" placeholder="What's on your mind?" required></textarea>
+      <button id="postButton" onclick="addPost()">Post</button>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
